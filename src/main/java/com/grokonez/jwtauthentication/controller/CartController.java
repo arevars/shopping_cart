@@ -23,10 +23,13 @@ public class CartController {
     @GetMapping("/cart")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public List <Product> getCartProducts() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Integer userId = (UserDetails)principal
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User)authentication.getPrincipal();
+        Long userId = user.getId();
 
-        return
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return cartRepository.getCartProductsByUserId(userId);
     }
 
 }
