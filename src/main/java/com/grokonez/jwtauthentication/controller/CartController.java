@@ -24,9 +24,9 @@ public class CartController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public List <Product> getCartProducts() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        Integer userId = (UserDetails)principal.
+//        Integer userId = (UserDetails)principal
 
-//        return cartRepository.getProductsByUserId();
+        return
     }
 
 }
