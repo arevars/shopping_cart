@@ -84,4 +84,20 @@ public class UserController {
         return ResponseEntity.ok().body("Product added successfully!");
     }
 
+    @DeleteMapping("/emptyCart")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity emptyCart() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+
+        User user = userRepository.findByUsername(currentPrincipalName).get();
+        user.getShoppingCart().clear();
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok().body("Cart emptied!");
+    }
+
+
+
 }
