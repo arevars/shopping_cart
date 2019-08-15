@@ -12,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api")
@@ -82,6 +84,34 @@ public class UserController {
 
 
         return ResponseEntity.ok().body("Product added successfully!");
+    }
+
+    @DeleteMapping("/deleteFromCart/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity deleteFromCart(@PathVariable(value = "id") Long productId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+
+        User user = userRepository.findByUsername(currentPrincipalName).get();
+
+        try {
+            List cart = user.getShoppingCart();
+            for(Product product : user.getShoppingCart()) {
+                if(product.getId().equals(productId)) {
+                    cart.remove(product);
+                    break;
+                }
+            }
+
+            userRepository.save(user);
+
+        } catch (Exception e) {
+            e.getMessage();
+        }
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok().body("Cart emptied!");
     }
 
     @DeleteMapping("/emptyCart")
