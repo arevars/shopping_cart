@@ -5,6 +5,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -38,13 +39,11 @@ public class User {
     @Size(min = 6, max = 100)
     private String password;
 
-
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_cart",
+    @JoinTable(name = "cart_product",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "cart_id", referencedColumnName = "id"))
-    private Set<Cart> shoppingCart;
-
+            inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
+    private List<Product> shoppingCart;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -59,6 +58,14 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public List<Product> getShoppingCart() {
+        return shoppingCart;
+    }
+
+    public void setShoppingCart(List<Product> shoppingCart) {
+        this.shoppingCart = shoppingCart;
     }
 
     public Long getId() {

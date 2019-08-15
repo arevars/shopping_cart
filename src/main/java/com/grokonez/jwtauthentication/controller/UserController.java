@@ -1,6 +1,8 @@
 package com.grokonez.jwtauthentication.controller;
 
+import com.grokonez.jwtauthentication.model.Product;
 import com.grokonez.jwtauthentication.model.User;
+import com.grokonez.jwtauthentication.repository.ProductRepository;
 import com.grokonez.jwtauthentication.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,22 +10,23 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
 
     @Autowired
     UserRepository userRepository;
 
     @Autowired
+    ProductRepository productRepository;
+
+    @Autowired
     PasswordEncoder encoder;
 
-    @GetMapping("/api/user")
+    @GetMapping("/user")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity getUser() {
 
@@ -31,7 +34,7 @@ public class UserController {
 
     }
 
-    @PutMapping("/api/user")
+    @PutMapping("/user")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 
     public ResponseEntity<User> updateUser(@RequestBody User userDetails) {
@@ -57,5 +60,28 @@ public class UserController {
 
     }
 //    @TODO implement logout
+
+
+    // @TODO can't add duplicate products to function table, find out why?
+    @PostMapping("/addToCart")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity addToCart(@RequestBody Product product) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+
+        User user = userRepository.findByUsername(currentPrincipalName).get();
+        try {
+            if (productRepository.existsById(product.getId())) {
+                user.getShoppingCart().add(product);
+
+                userRepository.save(user);
+            }
+        } catch (Exception e) {
+            e.getMessage();
+        }
+
+
+        return ResponseEntity.ok().body("Product added successfully!");
+    }
 
 }

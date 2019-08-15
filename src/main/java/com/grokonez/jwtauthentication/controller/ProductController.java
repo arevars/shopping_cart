@@ -3,6 +3,7 @@ package com.grokonez.jwtauthentication.controller;
 
 import com.grokonez.jwtauthentication.model.Product;
 import com.grokonez.jwtauthentication.repository.ProductRepository;
+import com.grokonez.jwtauthentication.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,9 @@ public class ProductController {
     //@TODO implement sorting, search by name, type
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping("/product")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")

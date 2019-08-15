@@ -4,8 +4,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Product {
@@ -29,8 +29,8 @@ public class Product {
     @NotNull
     private Integer count;
 
-    @ManyToMany(mappedBy = "cartProducts")
-    private Set<Cart> cart = new HashSet<>();
+    @ManyToMany(mappedBy = "shoppingCart")
+    private List<User> user;
 
     public Long getId() {
         return id;
@@ -88,4 +88,16 @@ public class Product {
         this.count = count;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return id.equals(product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
