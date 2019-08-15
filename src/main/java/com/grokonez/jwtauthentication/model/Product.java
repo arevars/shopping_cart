@@ -4,6 +4,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Product {
@@ -26,6 +28,9 @@ public class Product {
 
     @NotNull
     private Integer count;
+
+    @ManyToMany(mappedBy = "cartProducts")
+    private Set<Cart> cart = new HashSet<>();
 
     public Long getId() {
         return id;

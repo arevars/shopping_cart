@@ -1,10 +1,8 @@
 package com.grokonez.jwtauthentication.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
-
 
 @Entity
 public class Cart {
@@ -12,10 +10,34 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer cartId;
+    private Long userId;
 
-    @NotBlank
-    private Integer productId;
+    @ManyToMany(mappedBy = "shoppingCart")
+    private Set<User> shoppingCartUser = new HashSet<>();
+
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "cart_product",
+            joinColumns = @JoinColumn(name = "cart_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
+    private Set<Product> cartProducts = new HashSet<>();
+
+
+    public Set<Product> getCartProducts() {
+        return cartProducts;
+    }
+
+    public void setCartProducts(Set<Product> cartProducts) {
+        this.cartProducts = cartProducts;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public Long getId() {
         return id;
@@ -24,12 +46,5 @@ public class Cart {
     public void setId(Long id) {
         this.id = id;
     }
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_cart",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "cart_id"))
-    private Cart myCart;
-
 
 }
