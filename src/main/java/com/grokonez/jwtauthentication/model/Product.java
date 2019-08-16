@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +32,9 @@ public class Product {
 
     @ManyToMany(mappedBy = "shoppingCart")
     private List<User> user;
+
+    @ManyToMany(mappedBy = "orderedProducts")
+    private List<Order> orders;
 
     public Long getId() {
         return id;

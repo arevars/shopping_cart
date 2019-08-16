@@ -2,6 +2,7 @@ package com.grokonez.jwtauthentication.controller;
 
 import com.grokonez.jwtauthentication.model.Product;
 import com.grokonez.jwtauthentication.model.User;
+import com.grokonez.jwtauthentication.repository.OrderRepository;
 import com.grokonez.jwtauthentication.repository.ProductRepository;
 import com.grokonez.jwtauthentication.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class UserController {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    OrderRepository orderRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -96,8 +100,8 @@ public class UserController {
 
         try {
             List cart = user.getShoppingCart();
-            for(Product product : user.getShoppingCart()) {
-                if(product.getId().equals(productId)) {
+            for (Product product : user.getShoppingCart()) {
+                if (product.getId().equals(productId)) {
                     cart.remove(product);
                     break;
                 }
@@ -127,7 +131,6 @@ public class UserController {
 
         return ResponseEntity.ok().body("Cart emptied!");
     }
-
 
 
 }
