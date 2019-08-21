@@ -3,6 +3,7 @@ package com.grokonez.jwtauthentication.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -33,8 +34,27 @@ public class Product {
     @ManyToMany(mappedBy = "shoppingCart")
     private List<User> user;
 
-    @ManyToMany(mappedBy = "orderedProducts")
-    private List<Order> orders;
+//    @ManyToMany(mappedBy = "orderedProducts")
+//    private List<Order> orders;
+
+
+    public List<OrderProduct> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<OrderProduct> orders) {
+        this.orders = orders;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "orderedProducts")
+    private List<OrderProduct> orders = new ArrayList<>();
+
+
 
     public Long getId() {
         return id;

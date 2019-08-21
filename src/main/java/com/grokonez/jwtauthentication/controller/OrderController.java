@@ -1,7 +1,7 @@
 package com.grokonez.jwtauthentication.controller;
 
 
-import com.grokonez.jwtauthentication.model.Order;
+import com.grokonez.jwtauthentication.model.OrderProduct;
 import com.grokonez.jwtauthentication.model.OrderStatus;
 import com.grokonez.jwtauthentication.model.User;
 import com.grokonez.jwtauthentication.repository.OrderRepository;
@@ -33,16 +33,18 @@ public class OrderController {
 
         User user = userRepository.findByUsername(currentPrincipalName).get();
 
-        Order order = new Order();
-        order.setUserId(user.getId());
+        OrderProduct orderProduct = new OrderProduct();
+        orderProduct.setUserId(user.getId());
 
-        order.setOrderedProducts(user.getShoppingCart());
-        order.setStatus(OrderStatus.ORDER_STATUS_INPROCESS);
+        orderProduct.getOrderedProducts().addAll(user.getShoppingCart());
+        orderProduct.setStatus(OrderStatus.ORDER_STATUS_INPROCESS);
 
-        orderRepository.save(order);
+        orderRepository.save(orderProduct);
 
         user.setShoppingCart(null);
         userRepository.save(user);
         return ResponseEntity.ok().body("Checked out! wait for accepting order");
     }
+
+
 }
