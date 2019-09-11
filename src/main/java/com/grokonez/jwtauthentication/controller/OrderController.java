@@ -11,11 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
@@ -53,6 +51,36 @@ public class OrderController {
     @PreAuthorize("hasRole('ADMIN')")
     public List<OrderProduct> getOrders() {
         return orderRepository.findAll();
+    }
+
+    @PostMapping("orders/{id}/accept")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity acceptOrder(@PathVariable(value = "id") Long orderId) {
+
+        OrderProduct order = orderRepository.findById(orderId)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Order Not Found with -> orderId : " + orderId)
+                );
+
+        order.setStatus(OrderStatus.ORDER_STATUS_APPROVED);
+        orderRepository.save(order);
+
+        return ResponseEntity.ok().body("Order Accepted");
+    }
+
+    @PostMapping("orders/{id}/decline")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity declineOrder(@PathVariable(value = "id") Long orderId) {
+
+        OrderProduct order = orderRepository.findById(orderId)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Order Not Found with -> orderId : " + orderId)
+                );
+
+        order.setStatus(OrderStatus.ORDER_STATUS_REJECTED);
+        orderRepository.save(order);
+
+        return ResponseEntity.ok().body("Order Declined");
     }
 
 
