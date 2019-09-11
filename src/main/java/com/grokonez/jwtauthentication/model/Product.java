@@ -47,10 +47,6 @@ public class Product {
     }
 
     @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
             mappedBy = "orderedProducts")
     private List<OrderProduct> orders = new ArrayList<>();
 

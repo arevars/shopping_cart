@@ -16,26 +16,12 @@ public class OrderProduct {
     private Long userId;
 
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "order_product",
             joinColumns = { @JoinColumn(name = "order_id") },
             inverseJoinColumns = { @JoinColumn(name = "product_id") })
     private List<Product> orderedProducts = new ArrayList<>();
 
-
-
-//    @ManyToMany(cascade = CascadeType.ALL)
-//    @JoinTable(name = "order_product",
-//            joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
-//    private List<Product> orderedProducts;
-
-//    @Enumerated(EnumType.)
-//    @Column(length = 60)
     private Integer status;
 
     public Long getId() {
