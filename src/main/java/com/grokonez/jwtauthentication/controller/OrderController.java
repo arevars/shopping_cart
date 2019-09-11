@@ -44,8 +44,8 @@ public class OrderController {
 
         orderRepository.save(orderProduct);
 
-        user.setShoppingCart(null);
-        userRepository.save(user);
+//        user.setShoppingCart(null);
+//        userRepository.save(user);
         return ResponseEntity.ok().body("Checked out! wait for accepting order");
     }
 

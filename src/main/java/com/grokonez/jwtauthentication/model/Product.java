@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+
 @Entity
 @Table(name = "products")
 public class Product {
@@ -34,21 +35,20 @@ public class Product {
     @ManyToMany(mappedBy = "shoppingCart")
     private List<User> user;
 
+//    public List<OrderProduct> getOrders() {
+//        return orders;
+//    }
+//
+//    public void setOrders(List<OrderProduct> orders) {
+//        this.orders = orders;
+//    }
+
 //    @ManyToMany(mappedBy = "orderedProducts")
-//    private List<Order> orders;
-
-
-    public List<OrderProduct> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<OrderProduct> orders) {
-        this.orders = orders;
-    }
-
-    @ManyToMany(fetch = FetchType.LAZY,
-            mappedBy = "orderedProducts")
-    private List<OrderProduct> orders = new ArrayList<>();
+//    @ManyToMany(cascade=CascadeType.ALL)
+//    @JoinTable(name = "order_product",
+//            joinColumns = { @JoinColumn(name = "order_id") },
+//            inverseJoinColumns = { @JoinColumn(name = "product_id") })
+//    private List<OrderProduct> orders = new ArrayList<>();
 
 
 
